@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#300CBC</color>
+    <color name="colorPrimaryDark">#180073</color>
+    <color name="colorAccent">#7884F8</color>
+
+    <color name="bg_corners">#F5F2FF</color>
+    <color name="grey_card">#ACACAC</color>
+    <color name="green_basiccolor">#32CD32</color>
+    <color name="grey_default">#707070</color>
+    <color name="whitetrans">#73FFFFFF</color>
+    <color name="colorRed_A400">#FF1744</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="grey1">#484444</color>
+
+    <color name="blue_circle_dialog">#417B99EA</color>
+
+    <color name="list1">#2cc4bc</color>
+    <color name="list2">#fccc58</color>
+    <color name="list3">#7cbc2c</color>
+    <color name="list4">#5a595a</color>
+</resources>
