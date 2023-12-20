@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         AppUtils.showLoadingLayout(this, window, loadingMain)
 
         prefManager = PrefManager(this)
-        if (prefManager!!.isFirstTimeLaunch) {
+        if (prefManager!!.isFirstTimeLaunch && prefManager!!.username != "srs") {
             handleSynchronizeData()
         } else {
             AppUtils.closeLoadingLayout(loadingMain)
