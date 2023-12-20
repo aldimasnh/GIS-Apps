@@ -7,8 +7,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.cbi.gis.apps.R
+import com.cbi.gis.apps.data.repository.DailyReportRepository
 import com.cbi.gis.apps.data.repository.DataJobTypeRepository
 import com.cbi.gis.apps.data.repository.DataUnitRepository
+import com.cbi.gis.apps.ui.viewModel.DailyReportViewModel
 import com.cbi.gis.apps.ui.viewModel.DataJobTypeViewModel
 import com.cbi.gis.apps.ui.viewModel.DataUnitViewModel
 import com.cbi.gis.apps.utils.AlertDialogUtility
@@ -27,13 +29,19 @@ import kotlinx.android.synthetic.main.card_menu.view.ivMenu2
 import kotlinx.android.synthetic.main.card_menu.view.tvMenu1
 import kotlinx.android.synthetic.main.card_menu.view.tvMenu2
 import kotlinx.android.synthetic.main.header_apps.view.ivKeluar
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var dataJobTypeViewModel: DataJobTypeViewModel
     private lateinit var dataUnitViewModel: DataUnitViewModel
-    private var prefManager: PrefManager? = null
+    private lateinit var dailyReportViewModel: DailyReportViewModel
 
+    private var prefManager: PrefManager? = null
+    private var countDaily: Int = 0
+
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppUtils.transparentStatusNavBar(window)
@@ -41,6 +49,14 @@ class MainActivity : AppCompatActivity() {
         AppUtils.fadeUpAnimation(clParentMain)
 
         initViewModel()
+
+        val dateNow = SimpleDateFormat("yyyy-MM-dd").format(
+            Calendar.getInstance().time
+        )
+        dailyReportViewModel.getCountDailyNow(dateNow)
+        dailyReportViewModel.countDailyResult.observe(this) {
+            countDaily = it.toInt()
+        }
 
         loadingMain.visibility = View.VISIBLE
         AppUtils.showLoadingLayout(this, window, loadingMain)
@@ -65,12 +81,16 @@ class MainActivity : AppCompatActivity() {
             this,
             DataUnitViewModel.Factory(application, DataUnitRepository(this))
         )[DataUnitViewModel::class.java]
+        dailyReportViewModel = ViewModelProvider(
+            this,
+            DailyReportViewModel.Factory(application, this, DailyReportRepository(this))
+        )[DailyReportViewModel::class.java]
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setViewLayout() {
         tvLastUpdate.text = if (prefManager!!.lastUpdate!!.isNotEmpty()) {
-            prefManager!!.lastUpdate
+            getString(R.string.last_update2) + " " + prefManager!!.lastUpdate
         } else {
             getString(R.string.last_update1)
         }
@@ -87,11 +107,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun initClick() {
         mainMenu1.cvMenu1.setOnClickListener {
-            loadingMain.visibility = View.VISIBLE
-            AppUtils.showLoadingLayout(this, window, loadingMain)
+            if (countDaily > 0) {
+                AlertDialogUtility.alertDialog(
+                    this,
+                    getString(R.string.caution),
+                    getString(R.string.desc_info4),
+                    "warning.json"
+                )
+            } else {
+                loadingMain.visibility = View.VISIBLE
+                AppUtils.showLoadingLayout(this, window, loadingMain)
 
-            val intent = Intent(this, DailyReportActivity::class.java)
-            startActivity(intent)
+                val intent = Intent(this, DailyReportActivity::class.java)
+                startActivity(intent)
+            }
         }
         mainMenu1.cvMenu2.setOnClickListener {
             loadingMain.visibility = View.VISIBLE
@@ -104,12 +133,11 @@ class MainActivity : AppCompatActivity() {
             handleSynchronizeData("yes")
         }
         mainMenu2.cvMenu2.setOnClickListener {
-            AlertDialogUtility.alertDialog(
-                this,
-                getString(R.string.caution),
-                getString(R.string.desc_under_development),
-                "warning.json"
-            )
+            loadingMain.visibility = View.VISIBLE
+            AppUtils.showLoadingLayout(this, window, loadingMain)
+
+            val intent = Intent(this, WebViewActivity::class.java)
+            startActivity(intent)
         }
         headerMain.ivKeluar.setOnClickListener {
             AlertDialogUtility.withTwoActions(
@@ -138,6 +166,7 @@ class MainActivity : AppCompatActivity() {
 
                 dataJobTypeViewModel.deleteDataJobType()
                 dataUnitViewModel.deleteDataUnit()
+                dailyReportViewModel.deleteAllDataDaily()
 
                 val intent = Intent(this, SplashActivity::class.java)
                 startActivity(intent)

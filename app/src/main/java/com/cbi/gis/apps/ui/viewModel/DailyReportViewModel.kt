@@ -48,11 +48,14 @@ class DailyReportViewModel(
     private val _countArchiveResult = MutableLiveData<String>()
     val countArchiveResult: LiveData<String> get() = _countArchiveResult
 
-    private val _maintenceWlList = MutableLiveData<List<DataDailyModel>>()
-    val maintenceWlList: LiveData<List<DataDailyModel>> get() = _maintenceWlList
+    private val _countDailyResult = MutableLiveData<String>()
+    val countDailyResult: LiveData<String> get() = _countDailyResult
 
-    private val _arcMaintenceWlList = MutableLiveData<List<DataDailyModel>>()
-    val arcMaintenceWlList: LiveData<List<DataDailyModel>> get() = _arcMaintenceWlList
+    private val _dailyReportList = MutableLiveData<List<DataDailyModel>>()
+    val dailyReportList: LiveData<List<DataDailyModel>> get() = _dailyReportList
+
+    private val _arcDailyReportList = MutableLiveData<List<DataDailyModel>>()
+    val arcDailyReportList: LiveData<List<DataDailyModel>> get() = _arcDailyReportList
 
     private val noDailyUpload = ArrayList<String>()
     private var uploading = false
@@ -103,12 +106,23 @@ class DailyReportViewModel(
         }
     }
 
+    fun getCountDailyNow(date: String) {
+        viewModelScope.launch {
+            try {
+                _countDailyResult.value = dailyRepo.getCountDailyReport(0, date).toString()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _countDailyResult.value = "0"
+            }
+        }
+    }
+
     fun loadDailyReport() {
         viewModelScope.launch {
             val dataDailyReport = withContext(Dispatchers.IO) {
                 dailyRepo.getAllDailyReport()
             }
-            _maintenceWlList.value = dataDailyReport
+            _dailyReportList.value = dataDailyReport
         }
     }
 
@@ -117,7 +131,7 @@ class DailyReportViewModel(
             val dataDailyReport = withContext(Dispatchers.IO) {
                 dailyRepo.getAllDailyReport(1)
             }
-            _arcMaintenceWlList.value = dataDailyReport
+            _arcDailyReportList.value = dataDailyReport
         }
     }
 
@@ -135,6 +149,12 @@ class DailyReportViewModel(
         }
     }
 
+    fun deleteAllDataDaily() {
+        viewModelScope.launch {
+            dailyRepo.deleteAllDataDaily()
+        }
+    }
+
     fun statusUpload(): Boolean = uploading
 
     fun uploadToServer() {
@@ -145,7 +165,7 @@ class DailyReportViewModel(
 
         for (i in noDailyList.indices) {
             val postRequest: StringRequest = object : StringRequest(
-                Method.POST, AppUtils.mainServer,
+                Method.POST, AppUtils.apiServer,
                 Response.Listener { response ->
                     try {
                         val jObj = JSONObject(response)
@@ -223,7 +243,7 @@ class DailyReportViewModel(
                         "no_user" to prefManager.userno.toString()
                     )
 
-                    AppUtils.uploadDataRows(context, AppUtils.mainServer, params, object :
+                    AppUtils.uploadDataRows(context, AppUtils.apiServer, params, object :
                         AppUtils.UploadCallback {
                         override fun onUploadComplete(
                             message: String,

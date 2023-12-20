@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GIS Apps</string>
     <string name="welcome_back">Welcome Back</string>
     <string name="sign_continue">Sign to continue</string>
     <string name="forgot_password">Forgot password?</string>
@@ -23,9 +22,7 @@
     <string name="menu1">Daily Report</string>
     <string name="menu2">Upload Data</string>
     <string name="menu3">Synchronization</string>
-    <string name="form1">Report</string>
-    <string name="form2">Daily</string>
-    <string name="save">Simpan</string>
+    <string name="save">Save</string>
     <string name="information">Information</string>
     <string name="unit">Unit</string>
     <string name="progress">Progress</string>
@@ -42,11 +39,10 @@
     <string name="desc_check_account">Please check your username and password again</string>
     <string name="remember_me">Remember me</string>
     <string name="desc_info1">Updating data</string>
-    <string name="last_update2">Terakhir Diperbarui</string>
+    <string name="last_update2">Last Updated</string>
     <string name="desc_confirm2">Are you sure want to download data?</string>
     <string name="desc_info2">Data is up to date</string>
     <string name="desc_info3">Successfully updated data</string>
-    <string name="desc_info4">Please fill out this field</string>
     <string name="desc_confirm3">Are you sure want to logout?</string>
     <string name="desc_confirm4">Are you sure want to cancel?</string>
     <string name="desc_info5">Complete the form first</string>
@@ -57,4 +53,12 @@
     <string name="desc_info6">Successfully uploaded data</string>
     <string name="desc_info7">Uploading data</string>
     <string name="desc_confirm6">Are you sure want to upload data?</string>
+    <string name="desc_info4">You already filled daily report</string>
+    <string name="desc_confirm7">Are you want to return main page?</string>
+    <string name="recorded">recorded</string>
+    <string name="uploaded">uploaded</string>
+    <string name="due_today">Due today</string>
+    <string name="sort_by">Sort by</string>
+    <string name="latest">Latest</string>
+    <string name="history">History</string>
 </resources>

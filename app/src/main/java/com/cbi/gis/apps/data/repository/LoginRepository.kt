@@ -41,7 +41,7 @@ class LoginRepository(private val context: Context, private val window: Window, 
                 @SuppressLint("SuspiciousIndentation")
                 object : StringRequest(
                     Method.POST,
-                    AppUtils.mainServer,
+                    AppUtils.apiServer,
                     Response.Listener { response ->
                         try {
                             val jObj = JSONObject(response)

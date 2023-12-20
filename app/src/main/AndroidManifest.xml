@@ -22,6 +22,16 @@
             tools:ignore="Deprecated" />
 
         <activity
+            android:name=".ui.view.WebViewActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/material_whitebar"
+            tools:ignore="LockedOrientationActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.view.UploadActivity"
             android:exported="false"
             android:screenOrientation="portrait"

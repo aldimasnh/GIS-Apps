@@ -20,6 +20,7 @@ import com.cbi.gis.apps.ui.viewModel.DataJobTypeViewModel
 import com.cbi.gis.apps.utils.AlertDialogUtility
 import com.cbi.gis.apps.utils.AppUtils
 import com.cbi.gis.apps.utils.PrefManager
+import kotlinx.android.synthetic.main.activity_upload.clParentUpload
 import kotlinx.android.synthetic.main.activity_upload.clUploadData
 import kotlinx.android.synthetic.main.activity_upload.fbUploadData
 import kotlinx.android.synthetic.main.activity_upload.headerUpload
@@ -58,6 +59,7 @@ class UploadActivity : AppCompatActivity(), UploadAdapter.OnDeleteClickListener 
         super.onCreate(savedInstanceState)
         AppUtils.transparentStatusNavBar(window)
         setContentView(R.layout.activity_upload)
+        AppUtils.fadeUpAnimation(clParentUpload)
 
         initializeViewModelAdapter()
         setViewLayout()
@@ -155,13 +157,15 @@ class UploadActivity : AppCompatActivity(), UploadAdapter.OnDeleteClickListener 
         }
 
         llSortUpload.setOnClickListener {
-            sortedBool = !sortedBool
-            if (!sortedBool) {
-                ivIconSortBy.scaleY = 1f
-                uploadAdapter!!.toggleSortingOrder()
-            } else {
-                ivIconSortBy.scaleY = -1f
-                uploadAdapter!!.toggleSortingOrder()
+            if (totalList != 0) {
+                sortedBool = !sortedBool
+                if (!sortedBool) {
+                    ivIconSortBy.scaleY = 1f
+                    uploadAdapter!!.toggleSortingOrder()
+                } else {
+                    ivIconSortBy.scaleY = -1f
+                    uploadAdapter!!.toggleSortingOrder()
+                }
             }
         }
 
@@ -237,7 +241,7 @@ class UploadActivity : AppCompatActivity(), UploadAdapter.OnDeleteClickListener 
         if (isFirstPage) {
             loadDataFirstPage()
         } else {
-            dailyReportViewModel.arcMaintenceWlList.observe(this) {
+            dailyReportViewModel.arcDailyReportList.observe(this) {
                 uploadAdapter!!.submitList(it)
                 AppUtils.closeLoadingLayout(loadingUpload)
             }
@@ -246,7 +250,7 @@ class UploadActivity : AppCompatActivity(), UploadAdapter.OnDeleteClickListener 
     }
 
     private fun loadDataFirstPage() {
-        dailyReportViewModel.maintenceWlList.observe(this) {
+        dailyReportViewModel.dailyReportList.observe(this) {
             uploadAdapter!!.submitList(it)
             AppUtils.closeLoadingLayout(loadingUpload)
         }

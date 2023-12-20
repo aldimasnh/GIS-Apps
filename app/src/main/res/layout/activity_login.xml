@@ -151,6 +151,7 @@
                         android:layout_weight="1.6"
                         android:text="@string/login"
                         android:textSize="15sp"
+                        android:fontFamily="@font/poppins_semibold"
                         app:backgroundTint="@color/colorPrimary"
                         app:elevation="10dp" />
 

@@ -126,8 +126,6 @@ class LoginActivity : AppCompatActivity() {
             AppUtils.hideKeyboard(this)
 
             if (user.isEmpty() || pass.isEmpty()) {
-                AppUtils.handleInput(this, user, incEtUser.ilTempLyt)
-                AppUtils.handleInput(this, pass, incEtPass.ilTempLyt)
                 AlertDialogUtility.alertDialog(
                     this,
                     getString(R.string.caution),
@@ -135,8 +133,6 @@ class LoginActivity : AppCompatActivity() {
                     "warning.json"
                 )
             } else {
-                AppUtils.handleInput(this, user, incEtUser.ilTempLyt)
-                AppUtils.handleInput(this, pass, incEtPass.ilTempLyt)
                 loadingLogin.visibility = View.VISIBLE
                 AppUtils.showLoadingLayout(this, window, loadingLogin)
                 viewModel.loginUser(user, AppUtils.convertMD5(pass))
@@ -152,14 +148,14 @@ class LoginActivity : AppCompatActivity() {
             incEtUser.etTempLyt,
             incEtPass.etTempLyt,
             svParentLogin,
-            "start"
+            "next"
         )
         AppUtils.handleEditorActionAndScroll(
             this,
             incEtPass.etTempLyt,
             incEtPass.etTempLyt,
             svParentLogin,
-            "end"
+            "done"
         )
 
         AppUtils.handleTextChanges(incEtUser.etTempLyt) { user = it }
@@ -169,7 +165,7 @@ class LoginActivity : AppCompatActivity() {
             pass = it
         }
         AppUtils.checkSoftKeyboard(this, clParentLogin) {
-            svParentLogin.smoothScrollTo(0, svParentLogin.top)
+            svParentLogin.smoothScrollTo(0, 0)
         }
     }
 

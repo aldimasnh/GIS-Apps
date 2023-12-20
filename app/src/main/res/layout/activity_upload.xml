@@ -2,20 +2,38 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/clParentUpload"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
-    <ImageView
-        android:id="@+id/ivBgTopUpload"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clBgTopUpload"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="-100dp"
-        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/top_bg_gis2"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/top_bg_gis2"
+                tools:ignore="ContentDescription" />
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
         android:id="@+id/headerUpload"
@@ -31,10 +49,10 @@
         android:id="@+id/clTopCardUpload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/ivBgTopUpload"
+        app:layout_constraintBottom_toBottomOf="@+id/clBgTopUpload"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivBgTopUpload">
+        app:layout_constraintTop_toBottomOf="@+id/clBgTopUpload">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -78,7 +96,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-3dp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="tercatat"
+                        android:textAllCaps="false"
+                        android:text="@string/recorded"
                         android:textColor="@color/grey_card"
                         android:textSize="12sp"
                         android:textAlignment="center"
@@ -111,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-3dp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="terupload"
+                        android:text="@string/uploaded"
                         android:textColor="@color/grey_card"
                         android:textSize="12sp"
                         android:textAlignment="center"
@@ -136,13 +155,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_regular"
-            android:text="Due today"
+            android:text="@string/due_today"
             android:textColor="@color/grey_default"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="HardcodedText" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/llSortUpload"
@@ -160,10 +178,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2dp"
                 android:fontFamily="@font/poppins_regular"
-                android:text="Sort by"
+                android:text="@string/sort_by"
                 android:textColor="@color/grey_default"
-                android:textSize="12sp"
-                tools:ignore="HardcodedText" />
+                android:textSize="12sp"/>
 
             <ImageView
                 android:id="@+id/ivIconSortBy"
@@ -226,11 +243,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-3dp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="Terbaru"
+                    android:text="@string/latest"
                     android:textColor="@color/black"
                     android:textSize="10sp"
                     android:textAlignment="center"
-                    tools:ignore="HardcodedText,SmallSp" />
+                    tools:ignore="SmallSp" />
 
             </LinearLayout>
 
@@ -257,11 +274,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-3dp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="Histori"
+                    android:text="@string/history"
                     android:textColor="@color/grey_card"
                     android:textSize="10sp"
                     android:textAlignment="center"
-                    tools:ignore="HardcodedText,SmallSp" />
+                    tools:ignore="SmallSp" />
 
             </LinearLayout>
 

@@ -5,7 +5,6 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -33,6 +32,7 @@ import kotlinx.android.synthetic.main.activity_daily.incEtProgressDaily
 import kotlinx.android.synthetic.main.activity_daily.incEtTargetDaily
 import kotlinx.android.synthetic.main.activity_daily.incEtTglDaily
 import kotlinx.android.synthetic.main.activity_daily.incEtUnitDaily
+import kotlinx.android.synthetic.main.activity_daily.loadingDaily
 import kotlinx.android.synthetic.main.activity_daily.mbSaveDaily
 import kotlinx.android.synthetic.main.activity_daily.svParentDaily
 import kotlinx.android.synthetic.main.dropdown_view.view.actTempLyt
@@ -97,10 +97,12 @@ class DailyReportActivity : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     private fun setViewLayout() {
         // Header
-        headerDaily.tvHeaderLeft.text = getString(R.string.form2)
-        headerDaily.tvHeaderRight.text = " ${getString(R.string.form1)}"
+        val splTitleHead = getString(R.string.menu1).split(" ")
+        headerDaily.tvHeaderLeft.text = splTitleHead[0]
+        headerDaily.tvHeaderLeft.typeface = ResourcesCompat.getFont(this, R.font.poppins_light)
+        headerDaily.tvHeaderRight.text = " ${splTitleHead[1]}"
         headerDaily.tvHeaderRight.typeface =
-            ResourcesCompat.getFont(this, R.font.poppins_bolditalic)
+            ResourcesCompat.getFont(this, R.font.poppins_bold)
         headerDaily.ivLogoHeader.visibility = View.GONE
         headerDaily.ivBack.visibility = View.VISIBLE
         headerDaily.ivKeluar.setImageResource(R.drawable.gis_white)
@@ -173,7 +175,7 @@ class DailyReportActivity : AppCompatActivity() {
 
         incEtTglDaily.etTempLyt.setOnClickListener {
             AppUtils.hideKeyboard(this)
-            svParentDaily.smoothScrollTo(0, svParentDaily.top)
+            svParentDaily.smoothScrollTo(0, 0)
 
             val initialYear = dateDaily?.get(Calendar.YEAR) ?: calendar.get(Calendar.YEAR)
             val initialMonth = dateDaily?.get(Calendar.MONTH) ?: calendar.get(Calendar.MONTH)
@@ -212,7 +214,6 @@ class DailyReportActivity : AppCompatActivity() {
                 incEtJobDaily,
                 data.map { it.nama }.toTypedArray()
             ) { parent, _, position, _ ->
-                Log.d("cekData", "job: " + parent.getItemAtPosition(position).toString())
                 idJobType = idJobArr[position]
             }
         }
@@ -225,7 +226,6 @@ class DailyReportActivity : AppCompatActivity() {
                 incEtUnitDaily,
                 data.map { it.nama }.toTypedArray()
             ) { parent, _, position, _ ->
-                Log.d("cekData", "unit: " + parent.getItemAtPosition(position).toString())
                 idUnit = idUnitArr[position]
             }
         }
@@ -241,8 +241,8 @@ class DailyReportActivity : AppCompatActivity() {
                 },
                 svParentDaily,
                 when (editText) {
-                    incEtTargetDaily.etTempLyt -> "start"
-                    else -> "end"
+                    incEtTargetDaily.etTempLyt -> "next"
+                    else -> "done"
                 }
             )
 
@@ -271,7 +271,7 @@ class DailyReportActivity : AppCompatActivity() {
         }
 
         AppUtils.checkSoftKeyboard(this, clParentDaily) {
-            svParentDaily.smoothScrollTo(0, svParentDaily.top)
+            svParentDaily.smoothScrollTo(0, 0)
         }
 
         mbSaveDaily.setOnClickListener {
@@ -289,22 +289,7 @@ class DailyReportActivity : AppCompatActivity() {
                 ""
             }
 
-            Log.d("cekData", "dateDaily: $fixDated")
-            Log.d("cekData", "no_daily: ${AppUtils.generateNoDailyReport("23")}")
-            Log.d("cekData", "target: $target")
-            Log.d("cekData", "progress: $progress")
-            Log.d("cekData", "idJobType: $idJobType")
-            Log.d("cekData", "idUnit: $idUnit")
-            Log.d("cekData", "info: $information")
-
             if (fixDated.isEmpty() || idJobType == 0 || target == 0 || progress == 0 || idUnit == 0 || information.isEmpty()) {
-                AppUtils.handleInput(this, fixDated, incEtTglDaily.ilTempLyt)
-                AppUtils.handleInput(this, idJobType.toString(), incEtJobDaily.ddTempLyt)
-                AppUtils.handleInput(this, target.toString(), incEtTargetDaily.ilTempLyt)
-                AppUtils.handleInput(this, progress.toString(), incEtProgressDaily.ilTempLyt)
-                AppUtils.handleInput(this, idUnit.toString(), incEtUnitDaily.ddTempLyt)
-                AppUtils.handleInput(this, information, incEtInfoDaily.ilTempLyt)
-
                 AlertDialogUtility.alertDialog(
                     this,
                     getString(R.string.caution),
@@ -312,13 +297,6 @@ class DailyReportActivity : AppCompatActivity() {
                     "warning.json"
                 )
             } else {
-                AppUtils.handleInput(this, fixDated, incEtTglDaily.ilTempLyt)
-                AppUtils.handleInput(this, idJobType.toString(), incEtJobDaily.ddTempLyt)
-                AppUtils.handleInput(this, target.toString(), incEtTargetDaily.ilTempLyt)
-                AppUtils.handleInput(this, progress.toString(), incEtProgressDaily.ilTempLyt)
-                AppUtils.handleInput(this, idUnit.toString(), incEtUnitDaily.ddTempLyt)
-                AppUtils.handleInput(this, information, incEtInfoDaily.ilTempLyt)
-
                 AlertDialogUtility.withTwoActions(
                     this,
                     getString(R.string.yes),
@@ -344,6 +322,9 @@ class DailyReportActivity : AppCompatActivity() {
                                 getString(R.string.desc_success),
                                 "success.json"
                             ) {
+                                loadingDaily.visibility = View.VISIBLE
+                                AppUtils.showLoadingLayout(this, window, loadingDaily)
+
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                             }
@@ -379,7 +360,7 @@ class DailyReportActivity : AppCompatActivity() {
 
         view.actTempLyt.setOnTouchListener { _, event ->
             AppUtils.hideKeyboard(this)
-            svParentDaily.smoothScrollTo(0, svParentDaily.top)
+            svParentDaily.smoothScrollTo(0, 0)
             if (event.action == MotionEvent.ACTION_UP) {
                 view.actTempLyt.showDropDown()
             }
@@ -399,6 +380,9 @@ class DailyReportActivity : AppCompatActivity() {
             getString(R.string.desc_confirm4),
             "warning.json"
         ) {
+            loadingDaily.visibility = View.VISIBLE
+            AppUtils.showLoadingLayout(this, window, loadingDaily)
+
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

@@ -41,10 +41,13 @@ class DailyReportRepository(context: Context) {
         return rowsAffected > 0
     }
 
-    fun getCountDailyReport(archive: Int? = 0): Int {
+    fun getCountDailyReport(archive: Int? = 0, date: String? = ""): Int {
         val db = databaseHelper.readableDatabase
-        val query =
+        val query = if (date!!.isNotEmpty()) {
+            "SELECT COUNT(*) FROM ${DatabaseHelper.DB_TAB_DAILY} WHERE ${DatabaseHelper.DB_DATE} LIKE '%$date%'"
+        } else {
             "SELECT COUNT(*) FROM ${DatabaseHelper.DB_TAB_DAILY} WHERE ${DatabaseHelper.DB_ARCHIVE} = '$archive'"
+        }
         val cursor = db.rawQuery(query, null)
 
         var count = 0
@@ -107,5 +110,11 @@ class DailyReportRepository(context: Context) {
         db.close()
 
         return rowsAffected > 0
+    }
+
+    fun deleteAllDataDaily() {
+        val db = databaseHelper.writableDatabase
+        db.delete(DatabaseHelper.DB_TAB_DAILY, null, null)
+        db.close()
     }
 }

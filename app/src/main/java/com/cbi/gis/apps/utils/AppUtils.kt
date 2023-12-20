@@ -59,7 +59,8 @@ import java.util.concurrent.Executors
 
 object AppUtils {
 
-    const val mainServer = "http://192.168.1.15:8000/simonitoring/mobileapi"
+    const val dashboardServer = "http://192.168.1.15:8000/dashboard-gis"
+    const val apiServer = "http://192.168.1.15:8000/simonitoring/mobileapi"
 
     const val TAG_REQUESTDATA = "data"
     const val TAG_SUCCESSCODE = "code"
@@ -145,7 +146,10 @@ object AppUtils {
         val currentDate = Date()
         val dateResult = dateFormat.format(currentDate)
 
-        return dateResult.substring(0, 11) + ".DLY." + dateResult.takeLast(2) + setPadNumbers(userid, 3)
+        return dateResult.substring(
+            0,
+            11
+        ) + ".DLY." + dateResult.takeLast(2) + setPadNumbers(userid, 3)
     }
 
     fun setPadNumbers(str: String, length: Int): String {
@@ -162,12 +166,12 @@ object AppUtils {
         editText.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE, EditorInfo.IME_ACTION_NEXT -> {
-                    if (str == "start") {
+                    if (str == "next") {
                         nextEditText.requestFocus()
                         scrollView.smoothScrollTo(0, nextEditText.bottom)
                         true
                     } else {
-                        scrollView.smoothScrollTo(0, scrollView.top)
+                        scrollView.smoothScrollTo(0, 0)
                         hideKeyboard(context as Activity)
                         true
                     }
@@ -231,28 +235,6 @@ object AppUtils {
         layout.editText?.imeOptions = imeType
     }
 
-    fun handleInput(context: Context, input: String, layout: TextInputLayout) {
-        if (input.isEmpty() || input == "0") {
-            handleEmptyInput(context, input, layout)
-        } else {
-            handleNonEmptyInput(input, layout)
-        }
-    }
-
-    private fun handleEmptyInput(context: Context, input: String, layout: TextInputLayout) {
-        if (input.isEmpty() || input == "0") {
-            layout.helperText = "* ${context.getString(R.string.desc_info4)}"
-            layout.isHelperTextEnabled = true
-        }
-    }
-
-    private fun handleNonEmptyInput(input: String, layout: TextInputLayout) {
-        if (input.isNotEmpty() || input != "0") {
-            layout.helperText = null
-            layout.isHelperTextEnabled = false
-        }
-    }
-
     fun synchronizeJobType(
         context: Context,
         prefManager: PrefManager,
@@ -274,7 +256,7 @@ object AppUtils {
             @SuppressLint("SetTextI18n")
             object : StringRequest(
                 Method.POST,
-                mainServer,
+                apiServer,
                 Response.Listener { response ->
                     try {
                         val jObj = JSONObject(response)
@@ -282,8 +264,15 @@ object AppUtils {
                             1 -> {
                                 Log.d(LOG_DATA_JOB_TYPE, jObj.getString(TAG_MESSAGE))
 
-                                synchronizeUnit(context, prefManager, dataUnitVm, loaderView, update)
+                                synchronizeUnit(
+                                    context,
+                                    prefManager,
+                                    dataUnitVm,
+                                    loaderView,
+                                    update
+                                )
                             }
+
                             2 -> {
                                 Log.d(LOG_DATA_JOB_TYPE, jObj.getString(TAG_MESSAGE))
 
@@ -309,12 +298,25 @@ object AppUtils {
                                     }
                                 }
 
-                                synchronizeUnit(context, prefManager, dataUnitVm, loaderView, update)
+                                synchronizeUnit(
+                                    context,
+                                    prefManager,
+                                    dataUnitVm,
+                                    loaderView,
+                                    update
+                                )
                             }
+
                             else -> {
                                 Log.d(LOG_DATA_UNIT, jObj.getString(TAG_MESSAGE))
 
-                                synchronizeUnit(context, prefManager, dataUnitVm, loaderView, update)
+                                synchronizeUnit(
+                                    context,
+                                    prefManager,
+                                    dataUnitVm,
+                                    loaderView,
+                                    update
+                                )
                             }
                         }
                     } catch (e: JSONException) {
@@ -399,7 +401,7 @@ object AppUtils {
             @SuppressLint("SimpleDateFormat")
             object : StringRequest(
                 Method.POST,
-                mainServer,
+                apiServer,
                 Response.Listener { response ->
                     try {
                         val jObj = JSONObject(response)
@@ -455,8 +457,8 @@ object AppUtils {
 
                         val dateNow =
                             SimpleDateFormat("dd MMM yyyy HH:mm").format(Calendar.getInstance().time)
-                        prefManager.lastUpdate =
-                            context.getString(R.string.last_update2) + " $dateNow"
+                                .toString()
+                        prefManager.lastUpdate = dateNow
 
                         if (prefManager.isFirstTimeLaunch) {
                             prefManager.isFirstTimeLaunch = false

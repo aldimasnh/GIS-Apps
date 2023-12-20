@@ -16,7 +16,6 @@
         app:cursorColor="@color/colorPrimary"
         app:endIconMode="dropdown_menu"
         app:endIconTint="@color/colorPrimary"
-        app:helperTextTextColor="@color/colorRed_A400"
         app:hintTextColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
