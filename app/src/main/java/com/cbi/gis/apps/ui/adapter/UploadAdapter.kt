@@ -2,10 +2,12 @@ package com.cbi.gis.apps.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -31,6 +33,7 @@ class UploadAdapter(
         val itemTitle: TextView = itemView.findViewById(R.id.tvTitleListUpload)
         val itemDate: TextView = itemView.findViewById(R.id.tvDateListUpload)
         val itemJob: TextView = itemView.findViewById(R.id.tvJobListUpload)
+        val iconList: ImageView = itemView.findViewById(R.id.ivIconList)
         val viewList: View = itemView.findViewById(R.id.viewListUpload)
         val deleteButton: FloatingActionButton = itemView.findViewById(R.id.fbDelData)
 
@@ -63,20 +66,56 @@ class UploadAdapter(
         holder.bind(item)
 
         when (position % 5) {
-            0 -> holder.viewList.backgroundTintList =
-                ContextCompat.getColorStateList(context, R.color.colorPrimary)
-
-            1 -> holder.viewList.backgroundTintList =
-                ContextCompat.getColorStateList(context, R.color.list1)
-
-            2 -> holder.viewList.backgroundTintList =
-                ContextCompat.getColorStateList(context, R.color.list2)
-
-            3 -> holder.viewList.backgroundTintList =
-                ContextCompat.getColorStateList(context, R.color.list3)
-
-            4 -> holder.viewList.backgroundTintList =
-                ContextCompat.getColorStateList(context, R.color.list4)
+            0 -> {
+                holder.viewList.backgroundTintList =
+                    ContextCompat.getColorStateList(context, R.color.colorPrimary)
+                holder.iconList.setColorFilter(
+                    context.resources.getColor(
+                        R.color.colorPrimary,
+                        null
+                    ), PorterDuff.Mode.SRC_IN
+                )
+            }
+            1 -> {
+                holder.viewList.backgroundTintList =
+                    ContextCompat.getColorStateList(context, R.color.list1)
+                holder.iconList.setColorFilter(
+                    context.resources.getColor(
+                        R.color.list1,
+                        null
+                    ), PorterDuff.Mode.SRC_IN
+                )
+            }
+            2 -> {
+                holder.viewList.backgroundTintList =
+                    ContextCompat.getColorStateList(context, R.color.list2)
+                holder.iconList.setColorFilter(
+                    context.resources.getColor(
+                        R.color.list2,
+                        null
+                    ), PorterDuff.Mode.SRC_IN
+                )
+            }
+            3 -> {
+                holder.viewList.backgroundTintList =
+                    ContextCompat.getColorStateList(context, R.color.list3)
+                holder.iconList.setColorFilter(
+                    context.resources.getColor(
+                        R.color.list3,
+                        null
+                    ), PorterDuff.Mode.SRC_IN
+                )
+            }
+            4 -> {
+                holder.viewList.backgroundTintList =
+                    ContextCompat.getColorStateList(context, R.color.list4)
+                holder.iconList.setColorFilter(
+                    context.resources.getColor(
+                        R.color.list4,
+                        null
+                    ), PorterDuff.Mode.SRC_IN
+                )
+            }
         }
 
         holder.itemTitle.text = item.no_daily

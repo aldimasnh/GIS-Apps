@@ -161,16 +161,11 @@ object AppUtils {
         editText: TextInputEditText,
         nextEditText: TextInputEditText,
         scrollView: ScrollView,
-        str: String,
-        view: View? = null
+        str: String
     ): Boolean {
         editText.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE, EditorInfo.IME_ACTION_NEXT -> {
-                    if (view != null) {
-                        view.visibility = View.VISIBLE
-                    }
-
                     if (str == "next") {
                         nextEditText.requestFocus()
                         scrollView.smoothScrollTo(0, nextEditText.bottom)
