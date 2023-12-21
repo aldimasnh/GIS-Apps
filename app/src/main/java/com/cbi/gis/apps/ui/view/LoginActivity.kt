@@ -148,23 +148,30 @@ class LoginActivity : AppCompatActivity() {
             incEtUser.etTempLyt,
             incEtPass.etTempLyt,
             svParentLogin,
-            "next"
+            "next",
+            mbLogin
         )
         AppUtils.handleEditorActionAndScroll(
             this,
             incEtPass.etTempLyt,
             incEtPass.etTempLyt,
             svParentLogin,
-            "done"
+            "done",
+            mbLogin
         )
 
-        AppUtils.handleTextChanges(incEtUser.etTempLyt) { user = it }
+        AppUtils.handleTextChanges(incEtUser.etTempLyt) {
+            mbLogin.visibility = View.GONE
+            user = it
+        }
         AppUtils.handleTextChanges(incEtPass.etTempLyt) {
+            mbLogin.visibility = View.GONE
             incEtPass.etTempLyt.requestFocus()
             svParentLogin.smoothScrollTo(0, incEtPass.etTempLyt.bottom)
             pass = it
         }
         AppUtils.checkSoftKeyboard(this, clParentLogin) {
+            mbLogin.visibility = View.VISIBLE
             svParentLogin.smoothScrollTo(0, 0)
         }
     }

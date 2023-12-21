@@ -243,10 +243,12 @@ class DailyReportActivity : AppCompatActivity() {
                 when (editText) {
                     incEtTargetDaily.etTempLyt -> "next"
                     else -> "done"
-                }
+                },
+                mbSaveDaily
             )
 
             AppUtils.handleTextChanges(editText) {
+                mbSaveDaily.visibility = View.GONE
                 when (editText) {
                     incEtTargetDaily.etTempLyt -> target = try {
                         it.toInt()
@@ -271,6 +273,7 @@ class DailyReportActivity : AppCompatActivity() {
         }
 
         AppUtils.checkSoftKeyboard(this, clParentDaily) {
+            mbSaveDaily.visibility = View.VISIBLE
             svParentDaily.smoothScrollTo(0, 0)
         }
 

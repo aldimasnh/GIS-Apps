@@ -59,7 +59,7 @@ import java.util.concurrent.Executors
 
 object AppUtils {
 
-    const val dashboardServer = "http://192.168.1.15:8000/dashboard-gis"
+    const val dashboardServer = "http://192.168.1.15:8000/dashboard-gis/"
     const val apiServer = "http://192.168.1.15:8000/simonitoring/mobileapi"
 
     const val TAG_REQUESTDATA = "data"
@@ -161,11 +161,16 @@ object AppUtils {
         editText: TextInputEditText,
         nextEditText: TextInputEditText,
         scrollView: ScrollView,
-        str: String
+        str: String,
+        view: View? = null
     ): Boolean {
         editText.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE, EditorInfo.IME_ACTION_NEXT -> {
+                    if (view != null) {
+                        view.visibility = View.VISIBLE
+                    }
+
                     if (str == "next") {
                         nextEditText.requestFocus()
                         scrollView.smoothScrollTo(0, nextEditText.bottom)
