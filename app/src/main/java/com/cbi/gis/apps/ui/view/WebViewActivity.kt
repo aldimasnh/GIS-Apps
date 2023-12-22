@@ -20,10 +20,25 @@ class WebViewActivity : AppCompatActivity() {
         AppUtils.transparentStatusNavBar(window)
         setContentView(R.layout.activity_webview)
 
-        val settings = webviewGIS.settings
-        settings.javaScriptEnabled = true
-        webviewGIS.webViewClient = WebViewClient()
-        webviewGIS.loadUrl(AppUtils.dashboardServer)
+        try {
+            val settings = webviewGIS.settings
+            settings.javaScriptEnabled = true
+            webviewGIS.webViewClient = WebViewClient()
+            webviewGIS.loadUrl(AppUtils.dashboardServer)
+        } catch (e: Exception) {
+            AlertDialogUtility.alertDialogAction(
+                this,
+                getString(R.string.failed),
+                getString(R.string.error_volley1),
+                "error.json"
+            ) {
+                loadingWeb.visibility = View.VISIBLE
+                AppUtils.showLoadingLayout(this, window, loadingWeb)
+
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 
     @SuppressLint("MissingSuperCall")
