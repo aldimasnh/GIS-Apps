@@ -29,8 +29,6 @@ import kotlinx.android.synthetic.main.card_menu.view.ivMenu2
 import kotlinx.android.synthetic.main.card_menu.view.tvMenu1
 import kotlinx.android.synthetic.main.card_menu.view.tvMenu2
 import kotlinx.android.synthetic.main.header_apps.view.ivKeluar
-import java.text.SimpleDateFormat
-import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,7 +37,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dailyReportViewModel: DailyReportViewModel
 
     private var prefManager: PrefManager? = null
-    private var countDaily: Int = 0
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,14 +46,6 @@ class MainActivity : AppCompatActivity() {
         AppUtils.fadeUpAnimation(clParentMain)
 
         initViewModel()
-
-        val dateNow = SimpleDateFormat("yyyy-MM-dd").format(
-            Calendar.getInstance().time
-        )
-        dailyReportViewModel.getCountDailyNow(dateNow)
-        dailyReportViewModel.countDailyResult.observe(this) {
-            countDaily = it.toInt()
-        }
 
         loadingMain.visibility = View.VISIBLE
         AppUtils.showLoadingLayout(this, window, loadingMain)
@@ -107,20 +96,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun initClick() {
         mainMenu1.cvMenu1.setOnClickListener {
-            if (countDaily > 0) {
-                AlertDialogUtility.alertDialog(
-                    this,
-                    getString(R.string.caution),
-                    getString(R.string.desc_info4),
-                    "warning.json"
-                )
-            } else {
-                loadingMain.visibility = View.VISIBLE
-                AppUtils.showLoadingLayout(this, window, loadingMain)
+            loadingMain.visibility = View.VISIBLE
+            AppUtils.showLoadingLayout(this, window, loadingMain)
 
-                val intent = Intent(this, DailyReportActivity::class.java)
-                startActivity(intent)
-            }
+            val intent = Intent(this, DailyReportActivity::class.java)
+            startActivity(intent)
         }
         mainMenu1.cvMenu2.setOnClickListener {
             loadingMain.visibility = View.VISIBLE
